@@ -31,7 +31,6 @@ class TodoTest {
         when(docMock.getString("done")).thenReturn("done");
         when(docMock.getString("id")).thenReturn("id");
 
-
     }
 
     @Test

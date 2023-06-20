@@ -25,6 +25,7 @@ public class MongoDBFacade {
     String collectionName= "todoList";
 
     //Konstruktor
+
     public MongoDBFacade(String conString, String databaseName, String collectionName){
 
         this.conString=conString;
@@ -53,20 +54,21 @@ public class MongoDBFacade {
             collectionA.insertOne(docA);
         }
     }
-    //Söker efter att-göra uppgifter i databasen
+
+    //Söker efter att- göra uppgifter i databasen
     public Todo FindById(String id) {
         Document docA = new Document("id", id);
         Document search = collectionA.find(docA).first();
         return Todo.fromDoc(search);
     }
 
-    // Raderar att-göra uppgifter i databasen
+    // Raderar att- göra uppgifter i databasen
     public void Delete(String id) {
         Document doc = new Document("id", id);
         collectionA.deleteOne(doc);
     }
 
-    // Arraylista för att-göra uppgifter
+    // Arraylista för att- göra uppgifter
     public ArrayList<Todo> FindTodo(String text) {
         Document docA = new Document("Text", text);
         FindIterable<Document> result = collectionA.find(docA);

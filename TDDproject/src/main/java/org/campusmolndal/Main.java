@@ -7,7 +7,6 @@ public class Main {
 
         MongoDBFacade db = new MongoDBFacade();
 
-
         //Skapar to-do objekter
         Todo todoList = new Todo("Möte kl 9:00", "ja", "");
         db.insertOne(todoList);
@@ -20,9 +19,6 @@ public class Main {
 
         Todo todoList4 = new Todo("Möte kl 14", "nej", "");
         db.insertOne(todoList4);
-
-
-
 
 
     }
