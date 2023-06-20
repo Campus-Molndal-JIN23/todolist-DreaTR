@@ -22,7 +22,7 @@ public class MongoDBFacade {
 
     String databaseName= "Todo";
 
-    String collectionName= "TodoList";
+    String collectionName= "todoList";
 
     //Konstruktor
     public MongoDBFacade(String conString, String databaseName, String collectionName){
@@ -38,9 +38,11 @@ public class MongoDBFacade {
     }
     //Skapar index för todo kollektion
     public void createIndex(){
-        collectionA.createIndex(new Document("Text", 1),
-                new IndexOptions().unique(true));
+
+        collectionA.createIndex(new Document("text", 1), new IndexOptions().unique(true));
+
     }
+
     //Lägger till att- göra uppgifter i databasen
     public void insertOne(Todo todoList) {
         Document docA = todoList.toDoc();
@@ -57,17 +59,19 @@ public class MongoDBFacade {
         Document search = collectionA.find(docA).first();
         return Todo.fromDoc(search);
     }
+
     // Raderar att-göra uppgifter i databasen
     public void Delete(String id) {
         Document doc = new Document("id", id);
         collectionA.deleteOne(doc);
     }
+
     // Arraylista för att-göra uppgifter
     public ArrayList<Todo> FindTodo(String text) {
         Document docA = new Document("Text", text);
         FindIterable<Document> result = collectionA.find(docA);
         ArrayList<Todo> todoList = new ArrayList<>();
-        result.forEach(anställd -> todoList.add(Todo.fromDoc(anställd)));
+        result.forEach(todo -> todoList.add(Todo.fromDoc(todo)));
 
         return todoList;
     }

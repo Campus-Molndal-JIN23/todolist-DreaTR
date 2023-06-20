@@ -12,13 +12,11 @@ class TodoTest {
     private Todo todoMock;
     private Document docMock;
 
-
     @BeforeEach
     void setUp() {
 
         todoMock = mock(Todo.class);
         docMock = mock(Document.class);
-
 
 
         Todo mockedTodo = new Todo("mocked text", "mocked done", "mocked id");
@@ -68,6 +66,7 @@ class TodoTest {
         assertEquals(mockedId, actualResult);
 
     }
+
     @Test
     void testToString() {
 
