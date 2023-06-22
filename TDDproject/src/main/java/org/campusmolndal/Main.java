@@ -20,7 +20,6 @@ public class Main {
         Todo todoList4 = new Todo("Möte kl 14", "nej", "");
         db.insertOne(todoList4);
 
-
     }
 }
 

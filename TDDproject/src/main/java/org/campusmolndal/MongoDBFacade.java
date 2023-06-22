@@ -35,6 +35,7 @@ public class MongoDBFacade {
         Connect();
 
     }
+
     public MongoDBFacade() {
         Connect();
     }
@@ -46,6 +47,7 @@ public class MongoDBFacade {
 
         return false;
     }
+
     //Lägger till att- göra uppgifter i databasen
     public void insertOne(Todo todoList) {
         Document docA = todoList.toDoc();
@@ -78,6 +80,7 @@ public class MongoDBFacade {
 
         return todoList;
     }
+
     // Ansluter till databasen och hämtar instanser av databasen och samlingen
     public void Connect(){
         ServerApi serverApi = ServerApi.builder()
@@ -104,6 +107,5 @@ public class MongoDBFacade {
         }
 
     }
-
 
 }
