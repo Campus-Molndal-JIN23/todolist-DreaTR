@@ -2,13 +2,31 @@
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-7f7980b617ed060a017424585567c406b6ee15c891e84e1186181d67ecf80aa0.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=11359530)
 # Project name
 
+Todolist
+
+
 ## Description
 
-Provide a short description explaining the what, why, and how of your project. Use the following questions as a guide:
+Provide a short description explaining the what, why, and how of your project. Use the following questions 
+as a guide:
 
 - What was your motivation?
+
+To create a TODO Application with a menu system that can handle TODOs and also testers for 
+the application.
+
 - Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
+To bring together all the knowledge we have learned during the course and show that we can create an 
+application that uses tests to ensure that the application works as it should. The program must handle 
+TODOs where you must be able to create, read out, edit and delete TODOs according to the CRUD principle. Our
+TODOs must exist in a database, either MongoDB or SQLite.
+
 - What problem does it solve?
+It contributes to better design of the code, the code becomes testable and tested, you build in quality 
+early and prevent poor quality.
+
+
+
 - What did you learn?
 
 ## Table of Contents (Optional)
