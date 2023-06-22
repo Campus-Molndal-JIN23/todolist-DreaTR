@@ -3,103 +3,87 @@ package org.campusmolndal;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class TodoTest {
 
-    private Todo todoMock;
-    private Document docMock;
+    @Mock
+    private MongoDBFacade mongoDBFacadeMock;
+    private Todo todo;
+
+    private Document doc;
 
     @BeforeEach
     void setUp() {
 
-        todoMock = mock(Todo.class);
-        docMock = mock(Document.class);
-
-
-        Todo mockedTodo = new Todo("mocked text", "mocked done", "mocked id");
-        Todo todo = new Todo("text", "done", "id");
-
-
-        when(todoMock.getText()).thenReturn(mockedTodo.getText());
-        when (todoMock.getDone()).thenReturn(mockedTodo.getDone());
-        when(todoMock.get_id()).thenReturn(mockedTodo.get_id());
-        when(todoMock.toString()).thenReturn("text, done, id");
-        when(docMock.getString("text")).thenReturn("text");
-        when(docMock.getString("done")).thenReturn("done");
-        when(docMock.getString("id")).thenReturn("id");
-
+        MockitoAnnotations.openMocks(this);
+        todo = new Todo(mongoDBFacadeMock);
     }
 
     @Test
-    void getText() {
+    void setText_updatesTextInTodo() {
 
-        String mockedText = "mocked text";
+        // Set up test data
+        String newText = "Uppdaterad text";
 
-        String actualResult = todoMock.getText();
+        // Call the method under test
+        todo.setText(newText);
 
-        assertEquals(mockedText, actualResult);
-
+        // Assert the result
+        assertEquals(newText, todo.getText());
     }
-
     @Test
-    void getDone() {
+    void setDone_updatesDoneStatusInTodo() {
+        // Set up test data
+        boolean newDoneStatus = true;
 
-        String mockedDone = "mocked done";
+        // Call the method under test
+        todo.setDone(newDoneStatus);
 
-        String actualResult = todoMock.getDone();
-
-        assertEquals(mockedDone, actualResult);
-
+        // Assert the result
+        assertEquals(newDoneStatus, todo.isDone());
     }
-
     @Test
-    void get_id() {
+    void isDone_returnsFalseForNewTodo() {
+        // Call the method under test
+        boolean doneStatus = todo.isDone();
 
-        String mockedId = "mocked id";
-
-        String actualResult = todoMock.get_id();
-
-        assertEquals(mockedId, actualResult);
-
+        // Assert the result
+        assertFalse(doneStatus);
     }
-
     @Test
-    void testToString() {
+    void fromDoc_returnsNewTodoInstanceWithNullData() {
+        // Set up test data
+        Document doc = null;
 
-        String expectedText = "text";
-        String expectedDone = "done";
-        String expectedId = "id";
+        // Call the method under test
+        Todo result = Todo.fromDoc(doc);
 
-        String actualResult = todoMock.toString();
-
-        assertEquals(expectedText + ", " + expectedDone + ", " + expectedId, actualResult);
-
+        // Assert the result
+        assertEquals("", result.getText());
+        assertEquals("", result.getDone());
+        assertEquals("", result.get_id());
     }
-
     @Test
-    void fromDoc() {
+    void toDoc_returnsDocumentWithTodoData() {
+        // Set up test data
+        todo.setText("Sample text");
+        todo.setDone(true);
+        todo.set_id("123");
 
-        Todo result = Todo.fromDoc(docMock);
+        // Call the method under test
+        Document doc = todo.toDoc();
 
-        assertEquals("text", result.getText());
-        assertEquals("done", result.getDone());
-        assertEquals("id", result.get_id());
+        // Assert the result
+        assertNotNull(doc);
+        assertEquals("Sample text", doc.getString("text"));
+        assertEquals("true", doc.getString("done"));
+        assertEquals("123", doc.getString("_id"));
     }
 
-    @Test
-    void toDoc() {
 
-        Todo todo = new Todo("text", "done", "id");
-
-        Document result = todo.toDoc();
-
-        assertEquals("text", result.getString("text"));
-        assertEquals("done", result.getString("done"));
-        assertEquals("id", result.getString("_id"));
-
-
-    }
 }

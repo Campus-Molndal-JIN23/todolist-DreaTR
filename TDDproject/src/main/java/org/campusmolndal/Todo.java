@@ -14,6 +14,10 @@ public class Todo {
         this.done=done;
         this._id=_id;
     }
+    public Todo (MongoDBFacade mongoDBFacade)
+    {
+
+    }
     public String getText(){
         return text;
     }
@@ -42,5 +46,23 @@ public class Todo {
                 .append("done", done)
                 .append("_id",_id);
 
+    }
+
+    public void setText(String newText) {
+        this.text = newText;
+
+    }
+    public void setDone(boolean newDoneStatus) {
+        this.done = String.valueOf(newDoneStatus);
+
+    }
+
+    public boolean isDone() {
+        return Boolean.parseBoolean(done);
+
+    }
+
+    public void set_id(String number) {
+        this._id=number;
     }
 }

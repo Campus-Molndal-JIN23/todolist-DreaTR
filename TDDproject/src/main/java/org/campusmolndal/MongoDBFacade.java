@@ -1,5 +1,6 @@
 package org.campusmolndal;
 
+import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerApi;
@@ -37,13 +38,14 @@ public class MongoDBFacade {
     public MongoDBFacade() {
         Connect();
     }
+
     //Skapar index för todo kollektion
-    public void createIndex(){
+    public boolean createIndex(){
 
         collectionA.createIndex(new Document("text", 1), new IndexOptions().unique(true));
 
+        return false;
     }
-
     //Lägger till att- göra uppgifter i databasen
     public void insertOne(Todo todoList) {
         Document docA = todoList.toDoc();
@@ -56,10 +58,9 @@ public class MongoDBFacade {
     }
 
     //Söker efter att- göra uppgifter i databasen
-    public Todo FindById(String id) {
-        Document docA = new Document("id", id);
-        Document search = collectionA.find(docA).first();
-        return Todo.fromDoc(search);
+    public Document findById(String id) {
+        Document query = new Document("_id", id);
+        return collectionA.find(query).first();
     }
 
     // Raderar att- göra uppgifter i databasen
@@ -103,26 +104,6 @@ public class MongoDBFacade {
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
