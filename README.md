@@ -16,18 +16,24 @@ To create a TODO Application with a menu system that can handle TODOs and also t
 the application.
 
 - Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
+
 To bring together all the knowledge we have learned during the course and show that we can create an 
 application that uses tests to ensure that the application works as it should. The program must handle 
 TODOs where you must be able to create, read out, edit and delete TODOs according to the CRUD principle. Our
-TODOs must exist in a database, either MongoDB or SQLite.
+TODOs must exist in a database, either MongoDB or SQLite. I chose MongoDB as the database.
 
 - What problem does it solve?
+
 It contributes to better design of the code, the code becomes testable and tested, you build in quality 
-early and prevent poor quality.
-
-
+early and prevent poor quality. 
 
 - What did you learn?
+
+Writing robust tests for individual classes in a larger application and using GitHub Actions that allows you to automate
+your build, test, and deployment pipeline. You can create workflows that build and test every pull request to your repository, 
+or deploy merged pull requests to production.
+
+
 
 ## Table of Contents (Optional)
 
@@ -40,17 +46,30 @@ If your README is long, add a table of contents to make it easy for users to fin
 
 ## Installation
 
-What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
+- Operating system: Windows, Mac, Linux.
+- JDK 20 (Java Development Kit)
+- Intellij IDEA Community Edition 2022.1.1
+- Git
+- Github
+- MongoDB atlas server
+- MongoDB compass
 
 ## Usage
+Libraries:
+- Maven: org.junit.jupiter:junit-jupiter-engine:5.9.3
+- Maven: org.mockito:mockito-core:5.3.1
 
 Provide instructions and examples for use. Include screenshots as needed.
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+Clone the project
+```bash 
+https://github.com/Campus-Molndal-JIN23/todolist-DreaTR.git
+```
 
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
+Go to the project directory
+```bash 
+https://github.com/Campus-Molndal-JIN23/todolist-DreaTR
+```
 
 ## Credits
 
