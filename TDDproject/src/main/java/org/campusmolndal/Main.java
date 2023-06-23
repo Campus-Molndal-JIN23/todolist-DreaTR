@@ -1,9 +1,16 @@
 package org.campusmolndal;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Main {
     public static void main(String[] args) {
 
-        System.out.print("Hello and welcome!");
+        // Disable MongoDB driver logging
+        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
+        mongoLogger.setLevel(Level.SEVERE);
+
+        System.out.println("Hello and welcome!");
 
         MongoDBFacade db = new MongoDBFacade();
 
@@ -19,6 +26,9 @@ public class Main {
 
         Todo todoList4 = new Todo("Möte kl 14", "nej", "");
         db.insertOne(todoList4);
+
+        Todo todoList5 = new Todo("Lämna bilen på verkstad kl 16:30", "nej", "");
+        db.insertOne(todoList5);
 
     }
 }

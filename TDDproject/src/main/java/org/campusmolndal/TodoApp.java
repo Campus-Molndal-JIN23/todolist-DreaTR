@@ -60,7 +60,7 @@ public class TodoApp {
 
         if (index >= 0 && index < todos.size()) {
             String removedTodo = todos.remove(index);
-            System.out.println("TODO '" + removedTodo + "' borttagen.");
+            System.out.println("TODO '" + removedTodo + " är borttagen.");
         } else {
             System.out.println("Ogiltigt index.");
         }

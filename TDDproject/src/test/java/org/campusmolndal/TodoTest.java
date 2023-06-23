@@ -60,14 +60,14 @@ class TodoTest {
 
         assertEquals("", result.getText());
         assertEquals("", result.getDone());
-        assertEquals("", result.get_id());
+        assertEquals("", result.getId());
     }
     @Test
     void toDoc_returnsDocumentWithTodoData() {
 
         todo.setText("Sample text");
         todo.setDone(true);
-        todo.set_id("123");
+        todo.setId("123");
 
         Document doc = todo.toDoc();
 
