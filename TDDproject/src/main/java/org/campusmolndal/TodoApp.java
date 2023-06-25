@@ -18,8 +18,8 @@ public class TodoApp {
 
         while (running) {
             printMenu();
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = readIntInput();
+
 
             switch (choice) {
                 case 1:
@@ -32,6 +32,9 @@ public class TodoApp {
                     listTodos();
                     break;
                 case 4:
+                    updateTodo();
+                    break;
+                case 5:
                     running = false;
                     break;
                 default:
@@ -41,11 +44,15 @@ public class TodoApp {
         }
     }
     private void printMenu() {
+        System.out.println("Välkommen till Todo appen!");
+        System.out.println("==========================");
         System.out.println("Välj en åtgärd:");
         System.out.println("1. Lägg till en TODO");
         System.out.println("2. Ta bort en TODO");
         System.out.println("3. Visa alla TODOs");
-        System.out.println("4. Avsluta");
+        System.out.println("4. Uppdatera en TODO");
+        System.out.println("5. Avsluta");
+
     }
     void addTodo() {
         System.out.println("Ange en TODO:");
@@ -55,12 +62,24 @@ public class TodoApp {
     }
     private void removeTodo() {
         System.out.println("Ange indexet för den TODO som ska tas bort:");
-        int index = scanner.nextInt();
-        scanner.nextLine();
+        int index = readIntInput();
 
         if (index >= 0 && index < todos.size()) {
             String removedTodo = todos.remove(index);
             System.out.println("TODO '" + removedTodo + " är borttagen.");
+        } else {
+            System.out.println("Ogiltigt index.");
+        }
+    }
+    private void updateTodo() {
+        System.out.println("Ange indexet för den TODO som ska uppdateras:");
+        int index = readIntInput();
+
+        if (index >= 0 && index < todos.size()) {
+            System.out.println("Ange den nya TODO:");
+            String newTodo = scanner.nextLine();
+            todos.set(index, newTodo);
+            System.out.println("TODO uppdaterad.");
         } else {
             System.out.println("Ogiltigt index.");
         }
@@ -72,6 +91,15 @@ public class TodoApp {
             System.out.println("TODOs:");
             for (int i = 0; i < todos.size(); i++) {
                 System.out.println(i + ". " + todos.get(i));
+            }
+        }
+    }
+    private int readIntInput() {
+        while (true) {
+            try {
+                return Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Ogiltigt värde. Försök igen.");
             }
         }
     }

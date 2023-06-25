@@ -76,6 +76,4 @@ class TodoTest {
         assertEquals("true", doc.getString("done"));
         assertEquals("123", doc.getString("_id"));
     }
-
-
 }

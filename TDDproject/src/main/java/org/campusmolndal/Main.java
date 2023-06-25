@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 public class Main {
     public static void main(String[] args) {
 
-        // Disable MongoDB driver logging
+        // Inaktiverar MongoDB driver logging
         Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
         mongoLogger.setLevel(Level.SEVERE);
 
@@ -14,7 +14,7 @@ public class Main {
 
         MongoDBFacade db = new MongoDBFacade();
 
-        //Skapar to-do objekter
+        //Skapar to-do objekter i MongoDB
         Todo todoList = new Todo("Möte kl 9:00", "ja", "");
         db.insertOne(todoList);
 
