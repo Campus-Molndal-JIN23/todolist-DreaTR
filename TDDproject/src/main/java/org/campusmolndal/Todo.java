@@ -1,14 +1,15 @@
 package org.campusmolndal;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class Todo {
 
     String _id;
     String text;
-    String done;
+    boolean done;
 
-    Todo(String text, String done, String _id){
+    public Todo(String text, boolean done, String _id){
 
         this.text=text;
         this.done=done;
@@ -16,49 +17,54 @@ public class Todo {
     }
     public Todo (MongoDBFacade mongoDBFacade) {
     }
-    public String getText(){
+
+    public Todo(String text, boolean done) {
+    }
+
+    public Todo(String string, String text, boolean done) {
+    }
+
+    public String getText() {
         return text;
     }
-    public String getDone(){
+
+    public boolean isDone() {
         return done;
     }
-    public String getId(){
+
+    public String getId() {
         return _id;
     }
+
     public void setText(String newText) {
         this.text = newText;
+    }
 
+    public void setDone(boolean done) {
+        this.done = done;
     }
-    public void setDone(boolean newDoneStatus) {
-        this.done = String.valueOf(newDoneStatus);
 
+    public void setId(String id) {
+        this._id = id;
     }
-    public boolean isDone() {
-        return Boolean.parseBoolean(done);
 
-    }
-    public void setId(String number) {
-        this._id=number;
-    }
     @Override
-    public String toString (){
-        return text + done + _id;
+    public String toString() {
+        return "Todo{" +
+                "text='" + text + '\'' +
+                ", done=" + done +
+                ", _id='" + _id + '\'' +
+                '}';
     }
     public static Todo fromDoc(Document doc) {
-        if (doc == null) {
-            return new Todo("", "", "");
-        }
-        return new Todo(
-                doc.getString("text"),
-                doc.getString("done"),
-                doc.getString("_id")
-        );
+        ObjectId id = doc.getObjectId("_id");
+        String text = doc.getString("text");
+        boolean done = Boolean.valueOf(doc.getBoolean("done"));
+        return new Todo(text, done, id.toString());
     }
     public Document toDoc() {
         return new Document("text", text)
-                .append("done", done)
-                .append("_id",_id);
-
+                .append("done", done);
     }
 
 }

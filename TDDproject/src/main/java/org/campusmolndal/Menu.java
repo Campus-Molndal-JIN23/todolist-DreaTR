@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class TodoApp {
+public class Menu {
 
-    private List<String> todos;
+    private MongoDBFacade db;
+
+    private List<Todo> todos;
     private Scanner scanner;
 
-    public TodoApp() {
+    public Menu() {
         todos = new ArrayList<>();
         scanner = new Scanner(System.in);
+        db = new MongoDBFacade();
     }
     public void run() {
         boolean running = true;
 
         while (running) {
             printMenu();
-            int choice = readIntInput();
-
+                int choice = readIntInput();
 
             switch (choice) {
                 case 1:
@@ -35,6 +37,9 @@ public class TodoApp {
                     updateTodo();
                     break;
                 case 5:
+                    updateDoneStatus();
+                    break;
+                case 6:
                     running = false;
                     break;
                 default:
@@ -43,6 +48,7 @@ public class TodoApp {
             }
         }
     }
+
     private void printMenu() {
         System.out.println("Välkommen till Todo appen!");
         System.out.println("==========================");
@@ -51,22 +57,27 @@ public class TodoApp {
         System.out.println("2. Ta bort en TODO");
         System.out.println("3. Visa alla TODOs");
         System.out.println("4. Uppdatera en TODO");
-        System.out.println("5. Avsluta");
+        System.out.println("5. Uppdatera done-status för en TODO");
+        System.out.println("6. Avsluta");
 
     }
     void addTodo() {
         System.out.println("Ange en TODO:");
-        String todo = scanner.nextLine();
-        todos.add(todo);
+        String todoText = scanner.nextLine();
+        Todo newTodo = new Todo(todoText, false);
+        db.insertOne(newTodo);
+        todos.add(newTodo);
         System.out.println("TODO tillagd.");
     }
     private void removeTodo() {
+
         System.out.println("Ange indexet för den TODO som ska tas bort:");
         int index = readIntInput();
 
         if (index >= 0 && index < todos.size()) {
-            String removedTodo = todos.remove(index);
-            System.out.println("TODO '" + removedTodo + " är borttagen.");
+            Todo removedTodo = todos.remove(index);
+            db.Delete(removedTodo.getId());
+            System.out.println("TODO '" + removedTodo.getText() + "' är borttagen.");
         } else {
             System.out.println("Ogiltigt index.");
         }
@@ -77,20 +88,38 @@ public class TodoApp {
 
         if (index >= 0 && index < todos.size()) {
             System.out.println("Ange den nya TODO:");
-            String newTodo = scanner.nextLine();
-            todos.set(index, newTodo);
+            String newTodoText = scanner.nextLine();
+            Todo todoToUpdate = todos.get(index);
+            todoToUpdate.setText(newTodoText);
+            db.updateOne(todoToUpdate);
             System.out.println("TODO uppdaterad.");
         } else {
             System.out.println("Ogiltigt index.");
         }
     }
+    private void updateDoneStatus() {
+        System.out.println("Ange indexet för den TODO vars done-status ska uppdateras:");
+        int index = readIntInput();
+
+        if (index >= 0 && index < todos.size()) {
+            System.out.println("Ange den nya done-statusen (true/false):");
+            boolean newDoneStatus = Boolean.parseBoolean(scanner.nextLine());
+            Todo todoToUpdate = todos.get(index);
+            todoToUpdate.setDone(newDoneStatus);
+            db.updateOne(todoToUpdate);
+            System.out.println("Done");
+        }
+    }
+
     private void listTodos() {
+        ArrayList<Todo> todos = db.getAllTodos();
         if (todos.isEmpty()) {
             System.out.println("Inga TODOs att visa.");
         } else {
             System.out.println("TODOs:");
             for (int i = 0; i < todos.size(); i++) {
-                System.out.println(i + ". " + todos.get(i));
+                Todo todo = todos.get(i);
+                System.out.println(i + ". " + todo.getText() + " (Done: " + todo.isDone() + ")");
             }
         }
     }
@@ -103,10 +132,7 @@ public class TodoApp {
             }
         }
     }
-    public static void main(String[] args) {
-        TodoApp todoApp = new TodoApp();
-        todoApp.run();
-    }
+
 }
 
 

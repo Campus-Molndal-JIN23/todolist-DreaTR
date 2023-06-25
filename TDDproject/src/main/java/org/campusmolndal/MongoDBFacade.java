@@ -8,6 +8,7 @@ import com.mongodb.ServerApiVersion;
 import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 
@@ -64,20 +65,30 @@ public class MongoDBFacade {
         Document query = new Document("_id", id);
         return collectionA.find(query).first();
     }
+    //Uppdaterar att- göra uppgift
+    public void updateOne(Todo todoToUpdate) {
+        Document query = new Document("_id", todoToUpdate.getId());
+        Document update = new Document("$set", new Document("text", todoToUpdate.getText()));
+        collectionA.updateOne(query, update);
+    }
 
     // Raderar att- göra uppgifter i databasen
     public void Delete(String id) {
         Document doc = new Document("id", id);
         collectionA.deleteOne(doc);
     }
+    public ArrayList<Todo> getAllTodos() {
 
-    // Arraylista för att- göra uppgifter
-    public ArrayList<Todo> FindTodo(String text) {
-        Document docA = new Document("Text", text);
-        FindIterable<Document> result = collectionA.find(docA);
         ArrayList<Todo> todoList = new ArrayList<>();
-        result.forEach(todo -> todoList.add(Todo.fromDoc(todo)));
-
+        FindIterable<Document> result = collectionA.find();
+        result.forEach(todo -> {
+            ObjectId id = todo.getObjectId("_id");
+            String text = todo.getString("text");
+            boolean done = todo.getBoolean("done");
+            Todo todoItem = new Todo(id.toString(), text, done);
+            System.out.println(todoItem); // Skriv ut Todo-objektet för felsökning
+            todoList.add(todoItem);
+        });
         return todoList;
     }
 
