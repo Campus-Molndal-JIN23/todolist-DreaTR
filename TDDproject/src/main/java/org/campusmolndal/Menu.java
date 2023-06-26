@@ -172,18 +172,6 @@ public class Menu {
         scanner.close();
     }
 
-    // Main
-    public static void main(String[] args) {
-
-        // Inaktiverar MongoDB driver logging
-        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
-        mongoLogger.setLevel(Level.SEVERE);
-
-        Menu menu = new Menu ();
-        menu.start();
-        menu.close();
-    }
-
 } //Slut på class
 
 
