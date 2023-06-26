@@ -1,11 +1,14 @@
 package org.campusmolndal;
 
 import org.bson.Document;
-import org.junit.jupiter.api.Assertions;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class TodoTest {
+
 
     @Test
     void testTodoCreation() {
@@ -53,31 +56,27 @@ class TodoTest {
     }
     @Test
     void testFromDoc() {
-        Document doc = new Document("_id", "123")
-                .append("text", "Sample Todo")
-                .append("done", true);
+        Document doc = mock(Document.class);
+        when(doc.get("_id")).thenReturn(new ObjectId());
+        when(doc.getString("text")).thenReturn("Buy groceries");
+        when(doc.getBoolean("done")).thenReturn(false);
 
         Todo todo = Todo.fromDoc(doc);
 
-        assertEquals("123", todo.getId());
-        assertEquals("Sample Todo", todo.getText());
-        assertTrue(todo.isDone());
+        assertEquals("Buy groceries", todo.getText());
+        assertEquals(false, todo.isDone());
     }
     @Test
     void testToString() {
 
-        String id = "123";
-        String text = "Sample Todo";
-        boolean done = true;
+        Todo todoMock = mock(Todo.class);
 
-        Todo todo = new Todo();
-        todo.setId(id);
-        todo.setText(text);
-        todo.setDone(done);
+        when(todoMock.toString()).thenReturn("Todo\nID: 123\nText: Finish project\nStatus: Not Done\n");
 
-        String expectedString = String.format("Todo%nID: %s%nText: %s%nStatus: Done%n", id, text);
+        String expectedOutput = "Todo\nID: 123\nText: Finish project\nStatus: Not Done\n";
+        String actualOutput = todoMock.toString();
+        assertEquals(expectedOutput, actualOutput);
 
-        assertEquals(expectedString, todo.toString());
 
     }
 

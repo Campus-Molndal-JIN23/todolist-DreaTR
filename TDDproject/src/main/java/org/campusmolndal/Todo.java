@@ -56,8 +56,10 @@ public class Todo {
     }
     @Override
     public String toString() {
-        String doneStatus = done ? "Done" : "Not Done";
-        return String.format("Todo%nID: %s%nText: %s%nStatus: %s%n", id, text, doneStatus);
+
+            String doneStatus = done ? "Done" : "Not done";
+            return String.format("Todo%nID: %s%nText: %s%nStatus: %s%n", id, text, doneStatus);
     }
+
 
 }// Slut på class
