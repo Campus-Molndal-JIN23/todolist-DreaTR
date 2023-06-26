@@ -2,69 +2,62 @@ package org.campusmolndal;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import java.util.UUID;
 
 public class Todo {
 
-    String _id;
+    String id;
     String text;
     boolean done;
 
-    public Todo(String text, boolean done, String _id){
-
-        this.text=text;
-        this.done=done;
-        this._id=_id;
-    }
-    public Todo (MongoDBFacade mongoDBFacade) {
+    public Todo(){
+        this.id=UUID.randomUUID().toString();
     }
 
     public Todo(String text, boolean done) {
+        this();
+        this.text=text;
+        this.done=done;
     }
-
-    public Todo(String string, String text, boolean done) {
+    public String getId() {
+        return id;
     }
-
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getText() {
         return text;
     }
-
+    public void setText(String text) {
+        this.text = text;
+    }
     public boolean isDone() {
         return done;
     }
-
-    public String getId() {
-        return _id;
-    }
-
-    public void setText(String newText) {
-        this.text = newText;
-    }
-
     public void setDone(boolean done) {
         this.done = done;
     }
-
-    public void setId(String id) {
-        this._id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Todo{" +
-                "text='" + text + '\'' +
-                ", done=" + done +
-                ", _id='" + _id + '\'' +
-                '}';
-    }
-    public static Todo fromDoc(Document doc) {
-        ObjectId id = doc.getObjectId("_id");
-        String text = doc.getString("text");
-        boolean done = Boolean.valueOf(doc.getBoolean("done"));
-        return new Todo(text, done, id.toString());
-    }
     public Document toDoc() {
-        return new Document("text", text)
+        return new Document("_id", id != null ? id : "")
+                .append("text", text)
                 .append("done", done);
     }
+    public static Todo fromDoc(Document doc) {
+        Todo todo = new Todo();
+        Object id = doc.get("_id");
+        if (id instanceof ObjectId) {
+            todo.setId(((ObjectId) id).toString());
+        } else if (id instanceof String) {
+            todo.setId((String) id);
+        }
+        todo.setText(doc.getString("text"));
+        todo.setDone(doc.getBoolean("done"));
+        return todo;
+    }
+    @Override
+    public String toString() {
+        String doneStatus = done ? "Done" : "Not Done";
+        return String.format("Todo%nID: %s%nText: %s%nStatus: %s%n", id, text, doneStatus);
+    }
 
-}
+}// Slut på class

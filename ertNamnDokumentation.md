@@ -17,9 +17,8 @@ TODO ska existera i en databas, antingen MongoDB eller SQLite. Jag valde att anv
 ### Vad du har gjort
 
 Skapade fyra klasser i java doc och en klass i test doc.
-I java doc skapade jag klasserna MongoDBFacade, Todo, TodoApp och Main. I Main klassen skapade jag 
-fem olika todo:s som visas i MongoDB när man kör programmet i Main. I TodoApp:en har jag skrivit en
-enkel menysystem enligt CRUD principerna men som inte är ansluten till MongoDB.
+I java doc skapade jag klasserna MongoDB, Todo, Menu och Main. I Menu klassen har jag skrivit en
+ett menysystem enligt CRUD principerna som är ansluten till MongoDB.
 
 ## Planering
 
@@ -33,10 +32,10 @@ Läsa igenom kriterierna för vad programmet ska innehålla.
 
 #### Skisser (exempelvis)
 
-För klassen TodoApp skulle en skiss kunna se ut ut som denna:
+För klassen Menu skulle en skiss kunna se ut ut som denna:
 
 ========================
-|     TodoApp Menu     |
+|       Menu           |
 ========================
 | 1. Add a Todo        |
 | 2. Remove a Todo     |
@@ -83,7 +82,7 @@ ut.
 
 #### Pseudokod.(exempelvis)
 
-En pseukod beskriver logiska steg i ett program. I mitt projekt kan de se ut liknande: 
+En pseukod beskriver logiska steg i ett program. I mitt projekt kan de se ut som nedstående: 
 
 Initialize todos as an empty list
 
@@ -145,53 +144,52 @@ getter och setters varje klass ska innehålla.
 ## Arbetet och dess genomförande
 
 Jag klonade repository från Github, skapade de klasser som behövdes i javadokument. När klasserna var 
-färdiga genererade jag från Todo klassen så att TodoTest klassen skapdes i testdokumentet. Där skapades 
+färdiga genererade jag test från Todo så att en TodoTest klass skapdes i testdokumentet. Där skapades 
 olika testfall för att sedan köras.
 
 ### Vad som varit svårt
 
-Att formulera testfall från Todo klassen då jag hade metoder som exempelvis from dock to doc. Upplever 
-att det är lättare att skriva tester för getter och setters. 
+Hade en del svårigheter med att ansluta menysystemet till databasen. I första demo:t hade jag skapat 
+förbestämda todo objekter i main klassen som visades i MongoDB. Jag skapade ett separat menysystem i meny
+klassen tomm tillämpade CRUD principer men var inte ansluten till databasen. 
 Hade även lite svårt att förstå varför sourse root och testroot försvann några gånger efter att jag 
-gjort en pull. Men lyckades återställa dem efter lite reaserch.
+gjort en pull och sedan hämtat ner projektet. Men lyckades återställa dem efter lite reaserch.
 
 ### Beskriv lite olika lösningar du gjort
 
-Jag valde att visa mina todo:s genom MongoDB compassen då jag jag tycker att det ger bättre användar-
-upplevelse med att radera, ändra och uppdatera där.
+Fick hjälp av en kurskamrat med att ansluta menysystemet till MongoDB.
 
 ### Beskriv något som var besvärligt att få till
 
-Att koppla menysystem till MongoDB
+Att koppla menysystemet till MongoDB.
 
 ### Beskriv om du fått byta lösning och varför i sådana fall
 
-Jag missförstod angående punkten där med att skapa en menysystem. Trodde att CRUD principerna som jag 
-skrivit i Facade klassen var ett menysystem. Men fick feedback att vi skulle ha ett annat menystem som
-skulle köras på Intellij. Då skapade jag klassen TodoApp som har dessa funktioner. 
+Jag missförstod angående punkten med att skapa en menysystem. Trodde att CRUD principerna som jag 
+skrivit i MongoDB klassen var ett menysystem. Men fick feedback att vi skulle ha ett annat menysystem 
+som skulle köras på Intellij. Då skapade jag klassen Menu som har dessa funktioner. 
+Fick ändra lite i databasen men hjälp av en kurskamrat då kan inte kunde lägga till och visa todo:s.
 
-Var även på väg att ändra id-värden då det diskuterades i vår basgrupp om ObjektId ('6497532db910e177436d40ca')
-är ett unikt värde. Dem flesta antog att de inte var det. Jag hade redan dem id värden i mitt projekt men 
-gjorde lite reasearch vad unika värden i MongoDB är. Då fick jag information att ObjectId som en datatyp 
-för att unikt för identifiera dokument i en samling. Så jag lät min objectId stå kvar utan att ändra nåt.
 
 ## Reflektion & Slutsatser
 
 ### Vad gick bra
 
-Att skriva kod för det flesta klasser i Java doc.
+Skriva Readme och dokumentation
 
 ### Vad gick dåligt
 
-Ansluta menysystem till MångoDB
+Koppla Menu klassen till MongoDB
 
 ### Vad har du lärt dig
 
-Hur man planerar och strukturerar upp ett projekt.
+Hur man planerar och strukturerar upp ett projekt. Att ha fått hjälp av en mer erfaren kurskamrat har 
+varit mycket givande då jag lärt mig nya saker, som exempelvis UUID.randomUUID.
 
 ### Vad hade ni gjort annorlunda om ni gjort om projektet
 
-Hade jag haft mer tid och erfaranhet jag hade jag velat testa ansluta ett menysystem till MongoDB.
+Hade jag haft mer tid och erfaranhet jag hade velat ansluta menysystemet till MongoDB från
+början av projektet. Även läst på om UUID.randomUUID.
 
 ### Vilka möjligheter ser du med de kunskaper du fått under kursen.
 Förbättrad kodkvalitet, effektivare testning, kvalitetsverktyg och metoder i samband med databas hantering.

@@ -1,139 +1,189 @@
 package org.campusmolndal;
 
-import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Menu {
 
-    private MongoDBFacade db;
-
-    private List<Todo> todos;
-    private Scanner scanner;
+    private final MongoDB db;
+    private final Scanner scanner;
 
     public Menu() {
-        todos = new ArrayList<>();
+        db = new MongoDB("mongodb://localhost:27017", "todoDB", "todos");
         scanner = new Scanner(System.in);
-        db = new MongoDBFacade();
     }
-    public void run() {
-        boolean running = true;
+    public void start() {
+        System.out.println("=============================");
+        System.out.println("| Välkommen till Todo Appen |");
+        System.out.println("| Gör ett följande val:     |");
+        System.out.println("=============================");
 
-        while (running) {
-            printMenu();
-                int choice = readIntInput();
+        while (true) {
+            System.out.println("1. Lägg till en uppgift");
+            System.out.println("2. Visa en uppgift");
+            System.out.println("3. Visa alla uppgifter");
+            System.out.println("4. Uppdatera en uppgift");
+            System.out.println("5. Radera en uppgift");
+            System.out.println("6. Radera alla uppgifter");
+            System.out.println("0. Avsluta programmet");
+
+            int choice = getIntInput();
 
             switch (choice) {
                 case 1:
                     addTodo();
                     break;
                 case 2:
-                    removeTodo();
+                    readTodo();
                     break;
                 case 3:
-                    listTodos();
+                    readAllTodos();
                     break;
                 case 4:
                     updateTodo();
                     break;
                 case 5:
-                    updateDoneStatus();
+                    deleteTodo();
                     break;
                 case 6:
-                    running = false;
+                    db.deleteAllTodos();
+                    System.out.println("Alla uppgifter har raderats.");
                     break;
+                case 0:
+                    db.closeTodo();
+                    return;
                 default:
-                    System.out.println("Ogiltigt val. Försök igen.");
-                    break;
+                    System.out.println("Ogiltigt val. Var god försök igen.");
             }
+
         }
     }
 
-    private void printMenu() {
-        System.out.println("Välkommen till Todo appen!");
-        System.out.println("==========================");
-        System.out.println("Välj en åtgärd:");
-        System.out.println("1. Lägg till en TODO");
-        System.out.println("2. Ta bort en TODO");
-        System.out.println("3. Visa alla TODOs");
-        System.out.println("4. Uppdatera en TODO");
-        System.out.println("5. Uppdatera done-status för en TODO");
-        System.out.println("6. Avsluta");
-
-    }
-    void addTodo() {
-        System.out.println("Ange en TODO:");
-        String todoText = scanner.nextLine();
-        Todo newTodo = new Todo(todoText, false);
-        db.insertOne(newTodo);
-        todos.add(newTodo);
-        System.out.println("TODO tillagd.");
-    }
-    private void removeTodo() {
-
-        System.out.println("Ange indexet för den TODO som ska tas bort:");
-        int index = readIntInput();
-
-        if (index >= 0 && index < todos.size()) {
-            Todo removedTodo = todos.remove(index);
-            db.Delete(removedTodo.getId());
-            System.out.println("TODO '" + removedTodo.getText() + "' är borttagen.");
-        } else {
-            System.out.println("Ogiltigt index.");
-        }
-    }
-    private void updateTodo() {
-        System.out.println("Ange indexet för den TODO som ska uppdateras:");
-        int index = readIntInput();
-
-        if (index >= 0 && index < todos.size()) {
-            System.out.println("Ange den nya TODO:");
-            String newTodoText = scanner.nextLine();
-            Todo todoToUpdate = todos.get(index);
-            todoToUpdate.setText(newTodoText);
-            db.updateOne(todoToUpdate);
-            System.out.println("TODO uppdaterad.");
-        } else {
-            System.out.println("Ogiltigt index.");
-        }
-    }
-    private void updateDoneStatus() {
-        System.out.println("Ange indexet för den TODO vars done-status ska uppdateras:");
-        int index = readIntInput();
-
-        if (index >= 0 && index < todos.size()) {
-            System.out.println("Ange den nya done-statusen (true/false):");
-            boolean newDoneStatus = Boolean.parseBoolean(scanner.nextLine());
-            Todo todoToUpdate = todos.get(index);
-            todoToUpdate.setDone(newDoneStatus);
-            db.updateOne(todoToUpdate);
-            System.out.println("Done");
-        }
-    }
-
-    private void listTodos() {
-        ArrayList<Todo> todos = db.getAllTodos();
-        if (todos.isEmpty()) {
-            System.out.println("Inga TODOs att visa.");
-        } else {
-            System.out.println("TODOs:");
-            for (int i = 0; i < todos.size(); i++) {
-                Todo todo = todos.get(i);
-                System.out.println(i + ". " + todo.getText() + " (Done: " + todo.isDone() + ")");
-            }
-        }
-    }
-    private int readIntInput() {
+    private int getIntInput() {
         while (true) {
             try {
                 return Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.out.println("Ogiltigt värde. Försök igen.");
+                System.out.println("Felaktig input. Ange ett giltigt heltal.");
             }
         }
     }
 
-}
+    private boolean getBooleanInput() {
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("true")) {
+                return true;
+            } else if (input.equalsIgnoreCase("false")) {
+                return false;
+            }
+            System.out.println("Felaktig input. Vänligen ange \"true\" eller \"false\".'.");
+        }
+    }
 
+    // Skapar en todo
+    private void addTodo() {
+        System.out.println("Ange ny uppgift:");
+        String text = scanner.nextLine();
+        System.out.println("Är uppgiften gjord? |true|false|:");
+        boolean done = getBooleanInput();
+
+        Todo todo = new Todo();
+        todo.setText(text);
+        todo.setDone(done);
+
+        db.createTodo(todo);
+        System.out.println("Uppgift har lagts till.");
+    }
+
+    // Visar en todo
+    private void readTodo() {
+        System.out.println("Ange id för uppgiften att läsa:");
+        String id = scanner.nextLine();
+
+        Optional<Todo> todo = db.read(id);
+
+        if (todo.isPresent()) {
+            System.out.println("Uppgift hittade:");
+            System.out.println(todo.get());
+        } else {
+            System.out.println("Ingen uppgift hittades med det angivna ID:t.");
+        }
+    }
+
+    // Visar alla todo:s
+    private void readAllTodos() {
+        List<Todo> todos = db.readAllTodo();
+        if (!todos.isEmpty()) {
+            System.out.println("Alla todos:");
+            int count = 1;
+            for (Todo todo : todos) {
+                System.out.printf("%d. %s%n", count++, todo);
+            }
+        } else {
+            System.out.println("Inga uppgifter hittades.");
+        }
+    }
+
+    // Uppdaterar en todo
+    private void updateTodo() {
+        System.out.println("Ange id för uppgiften för att uppdatera:");
+        String id = scanner.nextLine();
+
+        Optional<Todo> todo = db.read(id);
+
+        if (todo.isPresent()) {
+            System.out.println("Ange den nya uppgiften:");
+            String text = scanner.nextLine();
+            System.out.println("Är uppgiften gjord? |true|false|:");
+            boolean done = getBooleanInput();
+
+            todo.get().setText(text);
+            todo.get().setDone(done);
+            db.updateTodo(todo.get());
+
+            System.out.println("Todo har uppdaterats.");
+        } else {
+            System.out.println("Ingen uppgift hittades med det angivna ID:t.");
+        }
+    }
+
+    // Raderar todo
+    private void deleteTodo() {
+        System.out.println("Ange id för att radera uppgiften:");
+        String id = scanner.nextLine();
+
+        Optional<Todo> todo = db.read(id);
+
+        if (todo.isPresent()) {
+            db.deleteTodo(id);
+            System.out.println("Todo har raderats bort.");
+        } else {
+            System.out.println("Ingen uppgift hittades med det angivna ID:t.");
+        }
+    }
+
+    // Stänger menyn
+    public void close() {
+        System.out.println("\nDu loggas ut");
+        scanner.close();
+    }
+
+    // Main
+    public static void main(String[] args) {
+
+        // Inaktiverar MongoDB driver logging
+        Logger mongoLogger = Logger.getLogger("org.mongodb.driver");
+        mongoLogger.setLevel(Level.SEVERE);
+
+        Menu menu = new Menu ();
+        menu.start();
+        menu.close();
+    }
+
+} //Slut på class
 
 
